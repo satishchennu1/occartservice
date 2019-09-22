@@ -5,12 +5,12 @@ pipeline {
   stages {
     stage('Build App') {
       steps {
-        sh "mvn clean package -s src/main/config/settings.xml"
+        sh "mvn clean package"
       }
     }
     stage('Integration Test') {
       steps {
-        sh "mvn verify -s src/main/config/settings.xml"
+        sh "mvn verify"
       }
     }
     stage('Build Image') {
