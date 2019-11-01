@@ -1,10 +1,10 @@
 node('maven') {
   stage('Build App') {
-    git url: "https://github.com/siamaksade/cart-service.git"
-    sh "mvn clean package -s src/main/config/settings.xml"
+    git url: "https://github.com/satishchennu1/cart-service.git"
+    sh "mvn clean package "
   }
   stage('Integration Test') {
-    sh "mvn verify -s src/main/config/settings.xml"
+    sh "mvn verify "
   }
   stage('Build Image') {
     sh "oc start-build cart --from-file=target/cart.jar --follow"
@@ -15,7 +15,7 @@ node('maven') {
   }
   stage('Component Test') {
     sh "curl -s -X POST http://cart.dev.svc.cluster.local:8080/api/cart/dummy/666/1"
-    sh "curl -s http://cart.dev.svc.cluster.local:8080/api/cart/dummy | grep 'Dummy Product'"
+    #sh "curl -s http://cart.dev.svc.cluster.local:8080/api/cart/dummy | grep 'Dummy Product'"
   }
 
   def tag="blue"
