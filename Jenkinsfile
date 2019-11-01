@@ -9,10 +9,14 @@ node('maven') {
   stage('Build Image') {
     sh "oc start-build cart --from-file=target/cart.jar --follow"
   }
-  stage('Deploy') {
-    openshiftDeploy depCfg: 'cart'
-    openshiftVerifyDeployment depCfg: 'cart', replicaCount: 1, verifyReplicaCount: true
-  }
+  stage("Deploy POD") {
+          openshift.withCluster() {
+            openshift.withProject() {
+              def dc = openshift.selector('dc', "cart")
+              dc.rollout().status()
+            }
+          }
+        }
   stage('Component Test') {
     sh "curl -s -X POST http://cart.dev.svc.cluster.local:8080/api/cart/dummy/666/1"
     #sh "curl -s http://cart.dev.svc.cluster.local:8080/api/cart/dummy | grep 'Dummy Product'"
