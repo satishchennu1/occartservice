@@ -12,7 +12,7 @@ items:
     source:
       git:
         ref: pipeline
-        uri: https://github.com/satishchennu1/cart-service.git
+        uri: https://github.com/satishchennu1/occartservice.git  
       type: Git
     strategy:
       type: JenkinsPipeline
