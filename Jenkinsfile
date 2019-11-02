@@ -34,6 +34,7 @@ pipeline {
           }
        }
      }
+    }
     stage('Component Test') {
       steps {
         script {
