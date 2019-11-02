@@ -13,32 +13,27 @@ pipeline {
         sh "mvn verify -s "
       }
     }
-    stage('Build Image') {
-      steps {
-        script {
-          openshift.withCluster() {
-            openshift.withProject() {
-              openshift.startBuild("cart", "--from-file=target/cart.jar").logs("-f")
-            }
-          }
+    stage('build') {
+      openshift.withCluster() {
+        openshift.withProject() {
+           def bld = openshift.startBuild('cart')
+           bld.untilEach {
+              return it.object().status.phase == "Running"
+             }
+           bld.logs('-f')
+          }  
         }
-      }
-    }
+     }
     stage('Deploy') {
-      steps {
-        script {
-          openshift.withCluster() {
+      openshift.withCluster() {
             openshift.withProject() {
               dc = openshift.selector("dc", "cart")
               dc.rollout().latest()
               timeout(10) {
-                  dc.rollout().status()
-              }
-            }
+              dc.rollout().status()
           }
-        }
-      }
-    }
+       }
+     }
     stage('Component Test') {
       steps {
         script {
