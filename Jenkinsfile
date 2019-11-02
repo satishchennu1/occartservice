@@ -5,12 +5,12 @@ pipeline {
   stages {
     stage('Build App') {
       steps {
-        sh "mvn clean package "
+        sh "mvn clean package"
       }
     }
     stage('Integration Test') {
       steps {
-        sh "mvn verify -s "
+        sh "mvn verify"
       }
     }
     stage('build') {
